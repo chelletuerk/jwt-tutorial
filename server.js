@@ -1,13 +1,10 @@
-// =================================================================
-// require all necessary packages & our .env config file ===========
-// =================================================================
-
 const express = require('express');
 const cors = require('cors');
 const app = express();
 const bodyParser = require('body-parser');
 const jwt = require('jsonwebtoken');
 const config = require('dotenv').config();
+
 
 app.locals.trains = [
   { id: 1, line: 'green', status: 'running' },
@@ -19,6 +16,7 @@ app.locals.trains = [
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
 app.use(cors());
+
 if (!config.CLIENT_SECRET || !config.USERNAME || !config.PASSWORD)
 {
   throw 'Make sure you have a CLIENT_SECRET, USERNAME, and PASSWORD in your .env file'
@@ -80,11 +78,9 @@ app.post('/authenticate', (request, response) => {
       message: 'Invalid Credentials'
     });
   }
-
-  // If the credentials are accurate, create a token and send it back
   else {
     let token = jwt.sign(user, app.get('secretKey'), {
-      expiresIn: 172800 // expires in 48 hours
+      expiresIn: 172800 
     });
 
     response.json({
